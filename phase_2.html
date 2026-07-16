@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Climbing Training Plan - Phase 2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* Reset & CSS Variables */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    :root {
+      --bg-dark: #0b1329;
+      --bg-card: rgba(28, 37, 65, 0.5);
+      --bg-card-hover: rgba(28, 37, 65, 0.8);
+      --border-color: rgba(255, 255, 255, 0.08);
+      
+      --primary: #3a86c8;       /* Deep Sky Blue for Endurance */
+      --primary-glow: rgba(58, 134, 200, 0.15);
+      --secondary: #00f5d4;     /* Neon Teal */
+      --success: #10b981;       /* Emerald */
+      --warning: #f59e0b;       /* Amber */
+      
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Outfit', sans-serif;
+      min-height: 100vh;
+      line-height: 1.6;
+      padding: 2rem 1rem;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(58, 134, 200, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(0, 245, 212, 0.08) 0%, transparent 40%);
+      background-attachment: fixed;
+    }
+    
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+    
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .logo-icon {
+      font-size: 2.5rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: float 4s ease-in-out infinite;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      background: linear-gradient(135deg, #ffffff 30%, #a5f3fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.25rem;
+    }
+    
+    .subtitle {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    
+    /* Global Actions */
+    .global-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.6rem 1.2rem;
+      border-radius: 12px;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+      backdrop-filter: blur(10px);
+    }
+    
+    .btn:hover {
+      background: var(--primary-glow);
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(58, 134, 200, 0.2);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #1d4ed8);
+      border: none;
+    }
+    
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #3b82f6, #1e40af);
+      box-shadow: 0 4px 25px rgba(58, 134, 200, 0.4);
+    }
+    
+    /* Tabs Navigation */
+    .tabs {
+      display: flex;
+      background: var(--bg-card);
+      padding: 0.4rem;
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(12px);
+      margin-bottom: 2rem;
+      position: sticky;
+      top: 1rem;
+      z-index: 100;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    }
+    
+    .tab-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.8rem 1rem;
+      border-radius: 12px;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .tab-btn:hover {
+      color: var(--text-main);
+    }
+    
+    .tab-btn.active {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Tab Content Pane */
+    .tab-pane {
+      display: none;
+      animation: fadeIn 0.4s ease forwards;
+    }
+    
+    .tab-pane.active {
+      display: block;
+    }
+    
+    /* Level Selector for Calendar */
+    .user-level-selector {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      background: var(--bg-card);
+      padding: 0.5rem;
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      justify-content: center;
+    }
+    
+    .user-lvl-btn {
+      flex: 1;
+      max-width: 250px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.6rem 1.2rem;
+      border-radius: 12px;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .user-lvl-btn.active {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(58, 134, 200, 0.3);
+    }
+
+    /* Cards & Layout */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 1.75rem;
+      backdrop-filter: blur(12px);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .card:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.6);
+    }
+    
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--primary), var(--secondary));
+      opacity: 0.7;
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1.25rem;
+    }
+    
+    .card-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    
+    .card-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 0.1rem;
+    }
+    
+    .badge {
+      background: rgba(6, 182, 212, 0.15);
+      color: #22d3ee;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      border: 1px solid rgba(6, 182, 212, 0.3);
+    }
+    
+    /* Checklist Items */
+    .checklist {
+      list-style-type: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+    
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .checklist-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+    
+    .checkbox-custom {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      border: 2px solid var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      transition: var(--transition);
+      position: relative;
+    }
+    
+    .checklist-item.checked .checkbox-custom {
+      border-color: var(--success);
+      background-color: var(--success);
+    }
+    
+    .checklist-item.checked .checkbox-custom::after {
+      content: '✓';
+      color: white;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+    
+    .checklist-text {
+      font-size: 0.95rem;
+      color: var(--text-main);
+      transition: var(--transition);
+    }
+    
+    .checklist-item.checked .checklist-text {
+      color: var(--text-muted);
+      text-decoration: line-through rgba(148, 163, 184, 0.5);
+    }
+    
+    .checklist-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: block;
+      margin-top: 0.15rem;
+    }
+    
+    /* Workout Info Block */
+    .info-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+    
+    .info-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.75rem;
+    }
+    
+    .workout-detail-card {
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 12px;
+      border-left: 3px solid var(--secondary);
+    }
+    
+    .workout-detail-card h4 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--secondary);
+    }
+    
+    .level-select {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1.5rem 0;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 0.3rem;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+    }
+    
+    .level-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.9rem;
+    }
+    
+    .level-btn.active {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(58, 134, 200, 0.3);
+    }
+    
+    .level-content {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    .level-content.active {
+      display: block;
+    }
+    
+    /* Timer Pane */
+    .timer-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 2.5rem;
+      text-align: center;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.7);
+    }
+    
+    .timer-presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    
+    .timer-preset-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      font-family: inherit;
+      font-weight: 500;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .timer-preset-btn:hover {
+      background: var(--primary-glow);
+      border-color: var(--primary);
+    }
+    
+    .timer-display-ring {
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      margin: 0 auto 2rem;
+      border: 6px solid rgba(255, 255, 255, 0.02);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background: radial-gradient(circle, rgba(11, 19, 41, 0.8) 0%, rgba(28, 37, 65, 0.3) 100%);
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6);
+      transition: var(--transition);
+    }
+    
+    .timer-display-ring.active-work {
+      border-color: var(--primary);
+      box-shadow: 0 0 30px rgba(58, 134, 200, 0.2), inset 0 0 20px rgba(58, 134, 200, 0.1);
+    }
+    
+    .timer-display-ring.active-rest {
+      border-color: var(--secondary);
+      box-shadow: 0 0 30px rgba(0, 245, 212, 0.2), inset 0 0 20px rgba(0, 245, 212, 0.1);
+    }
+    
+    .timer-state {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.25rem;
+    }
+    
+    .timer-time {
+      font-size: 4rem;
+      font-weight: 800;
+      line-height: 1;
+      color: #fff;
+    }
+    
+    .timer-set-info {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+    }
+    
+    .timer-controls {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+    
+    .timer-btn {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      border: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      transition: var(--transition);
+    }
+    
+    .timer-btn:hover {
+      background: var(--primary-glow);
+      border-color: var(--primary);
+      transform: scale(1.05);
+    }
+    
+    .timer-btn-main {
+      width: 64px;
+      height: 64px;
+      background: white;
+      color: black;
+      border: none;
+      font-size: 1.4rem;
+    }
+    
+    .timer-btn-main:hover {
+      background: var(--text-main);
+      transform: scale(1.08);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    }
+    
+    /* Callout styling */
+    .callout {
+      background: rgba(58, 134, 200, 0.1);
+      border-left: 4px solid var(--primary);
+      padding: 1.25rem;
+      border-radius: 0 12px 12px 0;
+      margin-top: 1.5rem;
+      font-size: 0.95rem;
+    }
+    
+    .callout strong {
+      color: var(--primary);
+    }
+    
+    /* Mermaid Box */
+    .mermaid-box {
+      margin-top: 3rem;
+      padding: 2rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .mermaid-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 1.5rem;
+      width: 100%;
+      text-align: center;
+    }
+    
+    /* Progress Reset */
+    .reset-bar {
+      margin-top: 2rem;
+      text-align: center;
+    }
+    
+    /* Animations */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Printing/PDF specific styling */
+    @media print {
+      body {
+        background-image: none !important;
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        padding: 0 !important;
+      }
+      
+      .container {
+        max-width: 100% !important;
+      }
+      
+      .tabs, 
+      .global-actions, 
+      .user-level-selector,
+      .timer-presets, 
+      .timer-controls, 
+      .reset-bar,
+      .timer-display-ring {
+        display: none !important;
+      }
+      
+      .tab-pane {
+        display: block !important;
+        opacity: 1 !important;
+        transform: none !important;
+        margin-bottom: 3rem;
+        page-break-after: always;
+      }
+      
+      .tab-pane:last-child {
+        page-break-after: avoid;
+      }
+      
+      .card {
+        background: transparent !important;
+        border: 1px solid #ddd !important;
+        box-shadow: none !important;
+        transform: none !important;
+        page-break-inside: avoid;
+        color: #000 !important;
+      }
+      
+      .card::before {
+        display: none !important;
+      }
+      
+      .card-title {
+        color: #000 !important;
+      }
+      
+      .badge {
+        border: 1px solid #777 !important;
+        color: #000 !important;
+        background: #eee !important;
+      }
+      
+      .checklist-item {
+        background: transparent !important;
+        border: 1px solid #eee !important;
+      }
+      
+      .checklist-text {
+        color: #000 !important;
+      }
+      
+      .info-section {
+        background: transparent !important;
+        border: 1px solid #ddd !important;
+        color: #000 !important;
+        page-break-inside: avoid;
+      }
+      
+      .info-title {
+        color: #000 !important;
+        border-bottom: 2px solid #000 !important;
+      }
+      
+      .workout-detail-card {
+        border-left: 3px solid #333 !important;
+        background: #fdfdfd !important;
+      }
+      
+      .workout-detail-card h4 {
+        color: #111 !important;
+      }
+      
+      .level-select {
+        display: none !important;
+      }
+      
+      .level-content {
+        display: block !important;
+        margin-top: 1rem;
+        border-top: 1px dashed #ccc;
+        padding-top: 1rem;
+      }
+      
+      .checkbox-custom {
+        border: 2px solid #000 !important;
+        background-color: transparent !important;
+      }
+      
+      .checklist-item.checked .checkbox-custom::after {
+        color: #000 !important;
+      }
+      
+      .checklist-item.checked .checklist-text {
+        text-decoration: none !important;
+        font-weight: bold;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="container">
+    
+    <header>
+      <div class="logo-container">
+        <span class="logo-icon">🧗</span>
+        <h1>Climbing Training Plan</h1>
+      </div>
+      <div class="subtitle">Phase 2: Low-Intensity Endurance (6 Weeks)</div>
+    </header>
+    
+    <div class="global-actions">
+      <button class="btn btn-primary" onclick="window.print()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"></path><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+        Export / Save to PDF
+      </button>
+    </div>
+    
+    <!-- Tab Controls -->
+    <nav class="tabs">
+      <button class="tab-btn active" onclick="switchTab(event, 'calendar')">
+        📅 Calendar Tracker
+      </button>
+      <button class="tab-btn" onclick="switchTab(event, 'details')">
+        📖 Workout Library
+      </button>
+      <button class="tab-btn" onclick="switchTab(event, 'timer')">
+        ⏱️ Workout Timer
+      </button>
+    </nav>
+    
+    <!-- Tab 1: Calendar Tracker -->
+    <div id="calendar" class="tab-pane active">
+      
+      <!-- User Level Selector (Dynamically changes the checklist contents based on Phase 2 chart) -->
+      <div class="user-level-selector">
+        <button class="user-lvl-btn active" onclick="setUserLevel('beginner')">Beginner</button>
+        <button class="user-lvl-btn" onclick="setUserLevel('intermediate')">Intermediate</button>
+        <button class="user-lvl-btn" onclick="setUserLevel('advanced')">Advanced / Elite</button>
+      </div>
+
+      <div class="grid-3" id="calendarGrid">
+        <!-- Javascript dynamically renders checklists here depending on level selected -->
+      </div>
+      
+      <div class="reset-bar">
+        <button class="btn" style="color: var(--text-muted);" onclick="resetCalendar()">
+          🔄 Reset Completed Checks
+        </button>
+      </div>
+    </div>
+    
+    <!-- Tab 2: Workout Details Library -->
+    <div id="details" class="tab-pane">
+      
+      <!-- 1. Low-Intensity Endurance -->
+      <div class="info-section">
+        <h3 class="info-title">🧗 1. Low-Intensity Endurance</h3>
+        <p style="font-size: 0.95rem; margin-bottom: 1.25rem;">Adapt this program to your local facility using the following variations. <strong>Do not complete more than one option in a single session.</strong> Alternating options is ideal.</p>
+        
+        <div class="workout-detail-card">
+          <h4>Option A: Routes - 5 x 3s (3-in-a-row)</h4>
+          <p>Select 3 different routes of the same grade that you can climb consecutively.</p>
+          <ul style="margin-left: 1.5rem; margin-top: 0.5rem; font-size: 0.95rem;">
+            <li><strong>Grade:</strong> At least 2-3 grades below onsight (Beginner/Intermediate) or 4 below (Advanced/Elite).</li>
+            <li><strong>Transition:</strong> Lower off and switch to the next route as rapidly and safely as possible.</li>
+            <li><strong>Structure:</strong> Climbing all 3 routes constitutes 1 set. Do 5 total sets with rest matching climbing duration.</li>
+            <li><strong>Progression:</strong> Bump up the route grading by one letter sub-grade in subsequent sessions.</li>
+          </ul>
+        </div>
+        
+        <div class="workout-detail-card">
+          <h4>Option B: Routes - Up-down-ups</h4>
+          <p>Climb up a route, down-climb a route, and then scale the first route a second time without resting.</p>
+          <ul style="margin-left: 1.5rem; margin-top: 0.5rem; font-size: 0.95rem;">
+            <li><strong>Grades (Beginner/Intermediate):</strong> Up-climb is 2 grades below onsight; down-climb is 3 grades below onsight.</li>
+            <li><strong>Grades (Advanced/Elite):</strong> Up-climb is 3 grades below onsight; down-climb is 5 grades below onsight.</li>
+            <li><strong>Structure:</strong> Do this sequence 5 times, matching rest time to climbing time.</li>
+            <li><strong>Progression:</strong> In subsequent sessions, step up the difficulty of the up-climb by 1 letter grade first, and then the down-climb by 1 letter grade next.</li>
+          </ul>
+        </div>
+        
+        <div class="workout-detail-card">
+          <h4>Option C: Bouldering Wall - Random Climbing</h4>
+          <p>On a quiet section of wall, climb continually for 10 minutes, choosing holds at random (up, down, traverse, diagonally). Avoid peak fatigue: rest in specialized stances and shake-out to preserve a moderate forearm pump.</p>
+          <p style="margin-top: 0.5rem; font-size: 0.95rem;"><strong>Recommended Session Timing Intervals:</strong></p>
+          <p style="color: var(--secondary); font-weight: 600; font-size: 0.95rem; letter-spacing: 0.05em; margin-top: 0.25rem;">
+            5m on / 5m off ➔ 10m on / 10m off ➔ 15m on / 15m off ➔ 10m on / 10m off ➔ 5m on
+          </p>
+        </div>
+
+        <div class="callout">
+          <strong>Optimum Wall Angle Guidelines:</strong>
+          <ul style="margin-left: 1.5rem; margin-top: 0.25rem; font-size: 0.9rem;">
+            <li>Beginner / Low-Intermediate: Vertical</li>
+            <li>Intermediate: 5 to 10 degrees overhanging</li>
+            <li>Advanced: 10 to 20 degrees overhanging</li>
+            <li>Elite: 20 to 30 degrees overhanging</li>
+          </ul>
+        </div>
+
+        <div class="workout-detail-card" style="margin-top: 1.5rem;">
+          <h4>Finisher</h4>
+          <p>Complete all endurance workouts with sets of <strong>pull-ups</strong> and <strong>straight-leg raises</strong> directly to structural failure:</p>
+          <ul style="margin-left: 1.5rem; margin-top: 0.25rem; font-size: 0.95rem;">
+            <li><strong>Beginner:</strong> 2 sets</li>
+            <li><strong>Intermediate:</strong> 3 sets</li>
+            <li><strong>Advanced / Elite:</strong> 5 sets</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- 2. Bouldering (Volume) -->
+      <div class="info-section">
+        <h3 class="info-title">🧗‍♂️ 2. Bouldering Volume Pyramids</h3>
+        <p style="font-size: 0.95rem;">Scale climbs in a logical difficulty pyramid. Focus on climbing mileage rather than working limit projects. Rest 1 minute between climbs at the first 2 grades, 2 minutes at levels 3-4, and 3-4 minutes on the peak grade. Attempt to increase peak or sub-peak grade reps by 1 each session.</p>
+        
+        <div class="level-select">
+          <button class="level-btn active" onclick="switchLevel('beginner')">Beginner</button>
+          <button class="level-btn" onclick="switchLevel('intermediate')">Intermediate</button>
+          <button class="level-btn" onclick="switchLevel('advanced')">Advanced</button>
+          <button class="level-btn" onclick="switchLevel('elite')">Elite</button>
+        </div>
+        
+        <div id="lvl-beginner" class="level-content active">
+          <div class="workout-detail-card">
+            <h4>Beginner / Low Intermediate Pyramid</h4>
+            <div style="font-size: 1.5rem; letter-spacing: 0.15em; font-weight: 700; text-align: center; margin: 1rem 0; color: var(--success);">
+              V0 ➔ V1 ➔ V2 ➔ V3 ➔ V2 ➔ V1
+            </div>
+            <p style="text-align: center; font-size: 0.95rem;">4x V0 • 3x V1 • 3x V2 • 1x V3 • 3x V2 • 3x V1</p>
+          </div>
+        </div>
+        
+        <div id="lvl-intermediate" class="level-content">
+          <div class="workout-detail-card">
+            <h4>Intermediate Pyramid</h4>
+            <div style="font-size: 1.5rem; letter-spacing: 0.15em; font-weight: 700; text-align: center; margin: 1rem 0; color: var(--secondary);">
+              V0 ➔ V1 ➔ V2 ➔ V3 ➔ V4 ➔ V5 ➔ V4 ➔ V3
+            </div>
+            <p style="text-align: center; font-size: 0.95rem;">4x V0 • 3x V1 • 2x V2 • 2x V3 • 2x V4 • 1x V5 • 2x V4 • 2x V3</p>
+          </div>
+        </div>
+        
+        <div id="lvl-advanced" class="level-content">
+          <div class="workout-detail-card">
+            <h4>Advanced Pyramid</h4>
+            <div style="font-size: 1.3rem; letter-spacing: 0.12em; font-weight: 700; text-align: center; margin: 1rem 0; color: var(--primary);">
+              V1 ➔ V2 ➔ V3 ➔ V4 ➔ V5 ➔ V6 ➔ V5 ➔ V4 ➔ V3 ➔ V2
+            </div>
+            <p style="text-align: center; font-size: 0.95rem;">4x V1 • 3x V2 • 2x V3 • 2x V4 • 2x V5 • 1x V6 • 2x V5 • 2x V4 • 2x V3 • 2x V2</p>
+          </div>
+        </div>
+        
+        <div id="lvl-elite" class="level-content">
+          <div class="workout-detail-card">
+            <h4>Elite Pyramid</h4>
+            <div style="font-size: 1.3rem; letter-spacing: 0.12em; font-weight: 700; text-align: center; margin: 1rem 0; color: var(--warning);">
+              V2 ➔ V3 ➔ V4 ➔ V5 ➔ V6 ➔ V7 ➔ V8 ➔ V7 ➔ V6 ➔ V5 ➔ V4 ➔ V3
+            </div>
+            <p style="text-align: center; font-size: 0.95rem;">3x V2 • 3x V3 • 2x V4 • 2x V5 • 2x V6 • 2x V7 • 1x V8 • 2x V7 • 2x V6 • 2x V5 • 2x V4 • 2x V3</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 3. Conditioning & Flexibility -->
+      <div class="info-section">
+        <h3 class="info-title">🏃‍♂️ 3. Conditioning & Flexibility</h3>
+        <p style="font-size: 0.95rem; margin-bottom: 1rem;">Maintained from Phase 1 to consolidate general physical capacity.</p>
+        
+        <div class="workout-detail-card">
+          <h4>a) Running Intervals (30 Minutes)</h4>
+          <ul style="margin-left: 1.5rem; font-size: 0.95rem;">
+            <li>Scale to include 3 to 4 high-output intervals.</li>
+            <li>Maintain steady aerobic speeds elsewhere to promote circulatory recovery.</li>
+          </ul>
+        </div>
+        
+        <div class="workout-detail-card">
+          <h4>b) Conditioning Circuit (10 Minutes)</h4>
+          <p>Burpees or rope skipping options: [ 1 min on / 1 min off ] x 5 sets.</p>
+        </div>
+        
+        <div class="workout-detail-card">
+          <h4>c) Flexibility (15 Minutes)</h4>
+          <p>Hold target stretches for 20 seconds. Release for 10. Repeat twice per position.</p>
+        </div>
+      </div>
+      
+      <!-- 4. Antagonists & Core -->
+      <div class="info-section">
+        <h3 class="info-title">💪 4. Antagonists & Core</h3>
+        
+        <div class="workout-detail-card">
+          <h4>Antagonist Movements</h4>
+          <p style="margin-bottom: 0.5rem;">Perform <strong>3 sets of 20 repetitions</strong>. Rest 2 minutes between sets. Stop just before failure (failure is optional on final set).</p>
+          <ul style="margin-left: 1.5rem; font-size: 0.95rem;">
+            <li><strong>Push-Ups:</strong> Keep spine straight (kneel if required).</li>
+            <li><strong>Reverse Wrist Curls:</strong> Using light comfortable weights.</li>
+            <li><strong>Finger Extensions:</strong> Wrap thick rubber bands around fingers and spread wide.</li>
+          </ul>
+        </div>
+        
+        <div class="workout-detail-card">
+          <h4>Core Circuit</h4>
+          <ul style="margin-left: 1.5rem; font-size: 0.95rem;">
+            <li style="margin-bottom: 0.75rem;">
+              <strong>Extreme Plank:</strong> 10 reps x 3 sets (2m rest). Add 1 rep per session.
+            </li>
+            <li style="margin-bottom: 0.75rem;">
+              <strong>Iron Cross Plank:</strong> 10 reps x 3 sets (2m rest). Plank with arms and legs spread wide. Add 1 rep per session.
+            </li>
+            <li>
+              <strong>Leg Paddles:</strong> 50 reps x 3 sets (2m rest). Lie on back, crunch up halfway with hands on temples. Extend legs straight out, hover above floor, and flutter/paddle. Add 5 reps per session.
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+    </div>
+    
+    <!-- Tab 3: Workout Timer -->
+    <div id="timer" class="tab-pane">
+      <div class="timer-container">
+        
+        <div class="timer-presets">
+          <button class="timer-preset-btn" onclick="setTimerPreset('random_climb_5', 300, 300, 2)">Random Climb Set A (5m/5m)</button>
+          <button class="timer-preset-btn" onclick="setTimerPreset('random_climb_10', 600, 600, 2)">Random Climb Set B (10m/10m)</button>
+          <button class="timer-preset-btn" onclick="setTimerPreset('random_climb_15', 900, 900, 2)">Random Climb Set C (15m/15m)</button>
+          <button class="timer-preset-btn" onclick="setTimerPreset('antag_rest', 120, 0, 1)">2-Minute Core Rest</button>
+        </div>
+        
+        <div id="timerRing" class="timer-display-ring">
+          <div id="timerState" class="timer-state">Ready</div>
+          <div id="timerDisplay" class="timer-time">00:00</div>
+          <div id="timerSetInfo" class="timer-set-info">Set 0 / 0</div>
+        </div>
+        
+        <div class="timer-controls">
+          <button class="timer-btn" onclick="resetTimer()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+          </button>
+          <button id="playPauseBtn" class="timer-btn timer-btn-main" onclick="toggleTimer()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          </button>
+          <button class="timer-btn" onclick="skipTimerSet()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg>
+          </button>
+        </div>
+        
+      </div>
+    </div>
+    
+    <!-- Mermaid Flowchart Box -->
+    <div class="mermaid-box no-print">
+      <div class="mermaid-title">Phase 2 Progression Breakdown</div>
+      <div class="mermaid">
+        graph TD
+          Start[Phase 2: Low-Intensity Endurance] --> B[Volume-focused low-intensity climbs]
+          B --> C[Always warm up and cool down]
+          B --> D[If sore, scale back volumes]
+          
+          subgraph Level_Splits [Weekly Microcycle Schedules]
+            Beginner[Beginner Plan]
+            Intermediate[Intermediate Plan]
+            Advanced[Advanced/Elite Plan]
+          end
+          
+          Beginner --> Beg_Det[2x Endurance / 1x Cond / 1x Core-Antag]
+          Intermediate --> Int_Det[3x Endurance / 1x Boulder / 1x Cond / 1x Core-Antag]
+          Advanced --> Adv_Det[3x Endurance / 2x Boulder / 1x Cond / 2x Core-Antag]
+      </div>
+    </div>
+    
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    // Initialize Mermaid diagram
+    mermaid.initialize({ 
+      startOnLoad: true, 
+      theme: 'dark',
+      themeVariables: {
+        background: '#0b1329',
+        primaryColor: '#1c2541',
+        primaryTextColor: '#f8fafc',
+        lineColor: '#3a86c8',
+        secondaryColor: '#0b1329'
+      }
+    });
+
+    // Tab Navigation Logic
+    function switchTab(evt, tabId) {
+      const tabPanes = document.getElementsByClassName("tab-pane");
+      for (let i = 0; i < tabPanes.length; i++) {
+        tabPanes[i].classList.remove("active");
+      }
+      
+      const tabButtons = document.getElementsByClassName("tab-btn");
+      for (let i = 0; i < tabButtons.length; i++) {
+        tabButtons[i].classList.remove("active");
+      }
+      
+      document.getElementById(tabId).classList.add("active");
+      if (evt) {
+        evt.currentTarget.classList.add("active");
+      }
+    }
+    
+    // Level Pyramid Logic (Workout details tab)
+    function switchLevel(lvlId) {
+      const levelContents = document.getElementsByClassName("level-content");
+      for (let i = 0; i < levelContents.length; i++) {
+        levelContents[i].classList.remove("active");
+      }
+      
+      const levelBtns = document.querySelectorAll(".level-select .level-btn");
+      levelBtns.forEach(btn => btn.classList.remove("active"));
+      
+      document.getElementById("lvl-" + lvlId).classList.add("active");
+      event.currentTarget.classList.add("active");
+    }
+
+    // Dynamic Calendar Generation based on level
+    const levelConfigs = {
+      beginner: {
+        title: "Beginner",
+        items: [
+          { group: "Low-Intensity Endurance", note: "Session 1 of 2 • 5x3s, Up-Downs, or Random Wall" },
+          { group: "Low-Intensity Endurance", note: "Session 2 of 2 • 5x3s, Up-Downs, or Random Wall" },
+          { group: "Conditioning & Flexibility", note: "Session 1 of 1 • 30m Run + Interval Circuit" },
+          { group: "Antagonists & Core", note: "Session 1 of 1 • Target Core Sets + Wrist curls" }
+        ]
+      },
+      intermediate: {
+        title: "Intermediate",
+        items: [
+          { group: "Low-Intensity Endurance", note: "Session 1 of 3 • 5x3s, Up-Downs, or Random Wall" },
+          { group: "Low-Intensity Endurance", note: "Session 2 of 3 • 5x3s, Up-Downs, or Random Wall" },
+          { group: "Low-Intensity Endurance", note: "Session 3 of 3 • 5x3s, Up-Downs, or Random Wall" },
+          { group: "Bouldering - Volume", note: "Session 1 of 1 • Pyramid focus on high mileage" },
+          { group: "Conditioning & Flexibility", note: "Session 1 of 1 • Run Intervals + Burpees/Rope" },
+          { group: "Antagonists & Core", note: "Session 1 of 1 • Floor Antagonist targets" }
+        ]
+      },
+      advanced: {
+        title: "Advanced / Elite",
+        items: [
+          { group: "Low-Intensity Endurance", note: "Session 1 of 3 • 5x3s, Up-Downs, or Random Wall" },
+          { group: "Low-Intensity Endurance", note: "Session 2 of 3 • 5x3s, Up-Downs, or Random Wall" },
+          { group: "Low-Intensity Endurance", note: "Session 3 of 3 • 5x3s, Up-Downs, or Random Wall" },
+          { group: "Bouldering - Volume", note: "Session 1 of 2 • Harder pyramid focus" },
+          { group: "Bouldering - Volume", note: "Session 2 of 2 • Technical focus on weak holds" },
+          { group: "Conditioning & Flexibility", note: "Session 1 of 1 • 30m run with 4 intervals" },
+          { group: "Antagonists & Core", note: "Session 1 of 2 • Floor circuits & Core" },
+          { group: "Antagonists & Core", note: "Session 2 of 2 • Advanced plank targets" }
+        ]
+      }
+    };
+
+    let currentUserLevel = localStorage.getItem('phase2_user_level') || 'beginner';
+
+    function renderCalendar() {
+      const config = levelConfigs[currentUserLevel];
+      const grid = document.getElementById('calendarGrid');
+      grid.innerHTML = '';
+
+      // We render 6 full weeks based on selection
+      for (let week = 1; week <= 6; week++) {
+        const card = document.createElement('div');
+        card.className = 'card';
+        
+        let subText = "Endurance Phase";
+        if (week <= 2) subText = "Phase Intro & Build";
+        else if (week <= 4) subText = "Volume Stabilization";
+        else subText = "Peak Load Weeks";
+
+        card.innerHTML = `
+          <div class="card-header">
+            <div>
+              <div class="card-title">Week ${week}</div>
+              <div class="card-subtitle">${subText}</div>
+            </div>
+            <span class="badge">${config.title}</span>
+          </div>
+          <p class="checklist-desc" style="margin-bottom: 0.5rem;">Target session checklists:</p>
+          <ul class="checklist"></ul>
+        `;
+
+        const list = card.querySelector('.checklist');
+        config.items.forEach((item, idx) => {
+          const itemKey = `p2_lvl_${currentUserLevel}_w${week}_i${idx}`;
+          const isChecked = localStorage.getItem(itemKey) === 'checked';
+          
+          const li = document.createElement('li');
+          li.className = `checklist-item ${isChecked ? 'checked' : ''}`;
+          li.onclick = () => toggleItem(li, itemKey);
+          
+          li.innerHTML = `
+            <span class="checkbox-custom"></span>
+            <div>
+              <span class="checklist-text">${item.group}</span>
+              <span class="checklist-desc">${item.note}</span>
+            </div>
+          `;
+          list.appendChild(li);
+        });
+
+        grid.appendChild(card);
+      }
+    }
+
+    function setUserLevel(lvl) {
+      currentUserLevel = lvl;
+      localStorage.setItem('phase2_user_level', lvl);
+      
+      const buttons = document.querySelectorAll('.user-lvl-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+      
+      renderCalendar();
+    }
+
+    function toggleItem(element, id) {
+      element.classList.toggle('checked');
+      if (element.classList.contains('checked')) {
+        localStorage.setItem(id, 'checked');
+      } else {
+        localStorage.removeItem(id);
+      }
+    }
+
+    function resetCalendar() {
+      if (confirm("Are you sure you want to clear all completed sessions for this level?")) {
+        const config = levelConfigs[currentUserLevel];
+        for (let week = 1; week <= 6; week++) {
+          config.items.forEach((_, idx) => {
+            const itemKey = `p2_lvl_${currentUserLevel}_w${week}_i${idx}`;
+            localStorage.removeItem(itemKey);
+          });
+        }
+        renderCalendar();
+      }
+    }
+
+    // Set Level Button initial visual state on load
+    document.addEventListener("DOMContentLoaded", () => {
+      const savedLevel = localStorage.getItem('phase2_user_level') || 'beginner';
+      const buttons = document.querySelectorAll('.user-lvl-btn');
+      buttons.forEach(btn => {
+        if (btn.getAttribute('onclick').includes(savedLevel)) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+      currentUserLevel = savedLevel;
+      renderCalendar();
+    });
+
+    // --- Audio Synthesis Setup (No external assets required) ---
+    let audioCtx = null;
+    function playBeep(frequency, duration) {
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        
+        oscillator.type = 'sine';
+        oscillator.frequency.value = frequency;
+        gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + duration);
+      } catch (e) {
+        console.warn("Audio synthesis block error: ", e);
+      }
+    }
+
+    // --- Timer Engine ---
+    let timerInterval = null;
+    let timerTimeLeft = 0; 
+    let timerPreset = null;
+    let currentSet = 1;
+    let isWorkPhase = true; 
+    
+    let configWorkDuration = 0;
+    let configRestDuration = 0;
+    let configTotalSets = 0;
+
+    function updateTimerDisplay() {
+      const mins = Math.floor(timerTimeLeft / 60).toString().padStart(2, '0');
+      const secs = (timerTimeLeft % 60).toString().padStart(2, '0');
+      document.getElementById('timerDisplay').innerText = `${mins}:${secs}`;
+      
+      const setInfo = document.getElementById('timerSetInfo');
+      const stateLabel = document.getElementById('timerState');
+      const ring = document.getElementById('timerRing');
+
+      if (configTotalSets > 1) {
+        setInfo.innerText = `Set ${currentSet} / ${configTotalSets}`;
+      } else {
+        setInfo.innerText = '';
+      }
+
+      if (timerInterval === null && timerTimeLeft === 0 && currentSet === 1 && isWorkPhase) {
+        stateLabel.innerText = "Ready";
+        ring.className = "timer-display-ring";
+      } else {
+        if (isWorkPhase) {
+          stateLabel.innerText = "Work";
+          stateLabel.style.color = "var(--primary)";
+          ring.className = "timer-display-ring active-work";
+        } else {
+          stateLabel.innerText = "Rest";
+          stateLabel.style.color = "var(--secondary)";
+          ring.className = "timer-display-ring active-rest";
+        }
+      }
+    }
+
+    function setTimerPreset(presetName, workDuration, restDuration, totalSets) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      
+      timerPreset = presetName;
+      configWorkDuration = workDuration;
+      configRestDuration = restDuration;
+      configTotalSets = totalSets;
+      
+      currentSet = 1;
+      isWorkPhase = true;
+      timerTimeLeft = workDuration;
+      
+      document.getElementById('playPauseBtn').innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>`;
+      updateTimerDisplay();
+    }
+
+    function toggleTimer() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+
+      if (timerInterval !== null) {
+        // Pause
+        clearInterval(timerInterval);
+        timerInterval = null;
+        document.getElementById('playPauseBtn').innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>`;
+      } else {
+        // Start/Resume
+        if (timerTimeLeft === 0) {
+          resetTimer();
+        }
+        timerInterval = setInterval(tick, 1000);
+        document.getElementById('playPauseBtn').innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>`;
+      }
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      currentSet = 1;
+      isWorkPhase = true;
+      timerTimeLeft = configWorkDuration || 0;
+      document.getElementById('playPauseBtn').innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>`;
+      updateTimerDisplay();
+    }
+
+    function skipTimerSet() {
+      if (timerPreset === null) return;
+      handlePhaseTransition();
+    }
+
+    function tick() {
+      if (timerTimeLeft > 0) {
+        timerTimeLeft--;
+        // PIP count down sounds at final 3 seconds
+        if (timerTimeLeft <= 3 && timerTimeLeft > 0) {
+          playBeep(880, 0.1);
+        }
+        updateTimerDisplay();
+      } else {
+        handlePhaseTransition();
+      }
+    }
+
+    function handlePhaseTransition() {
+      playBeep(isWorkPhase ? 1200 : 600, 0.4); 
+      
+      if (isWorkPhase) {
+        if (configRestDuration > 0) {
+          isWorkPhase = false;
+          timerTimeLeft = configRestDuration;
+        } else {
+          advanceSet();
+        }
+      } else {
+        advanceSet();
+      }
+      updateTimerDisplay();
+    }
+
+    function advanceSet() {
+      if (currentSet < configTotalSets) {
+        currentSet++;
+        isWorkPhase = true;
+        timerTimeLeft = configWorkDuration;
+      } else {
+        // Complete
+        clearInterval(timerInterval);
+        timerInterval = null;
+        document.getElementById('playPauseBtn').innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>`;
+        document.getElementById('timerState').innerText = "Done!";
+        playBeep(1000, 0.8);
+      }
+    }
+  </script>
+</body>
+</html>

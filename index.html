@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notion HTML Live Previewer</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            display: flex;
+            height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: #191919;
+            color: #E3E3E3;
+            overflow: hidden;
+        }
+        .pane {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .pane-title {
+            background-color: #202020;
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #2A2A2A;
+            color: #8F8F8F;
+        }
+        textarea {
+            flex: 1;
+            background-color: #191919;
+            color: #E3E3E3;
+            border: none;
+            padding: 16px;
+            font-family: "Fira Code", Consolas, Monaco, monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: none;
+            outline: none;
+        }
+        iframe {
+            flex: 1;
+            background-color: #FFFFFF;
+            border: none;
+            width: 100%;
+            height: 100%;
+        }
+        .divider {
+            width: 2px;
+            background-color: #2A2A2A;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Left Pane: The Code Editor -->
+    <div class="pane">
+        <div class="pane-title">HTML Editor</div>
+        <textarea id="editor" placeholder="Type or paste your HTML here..." spellcheck="false"><h1>Hello from Notion!</h1>
+<p>Edit this code to see it update live.</p>
+<button onclick="alert('JS works too!')">Click Me</button></textarea>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Right Pane: The Live Output -->
+    <div class="pane">
+        <div class="pane-title">Live Preview</div>
+        <iframe id="preview" sandbox="allow-scripts"></iframe>
+    </div>
+
+    <script>
+        const editor = document.getElementById('editor');
+        const preview = document.getElementById('preview');
+
+        function updatePreview() {
+            const code = editor.value;
+            // Write the text area content directly into the sandboxed iframe
+            const iframeDoc = preview.contentDocument || preview.contentWindow.document;
+            iframeDoc.open();
+            iframeDoc.write(code);
+            iframeDoc.close();
+        }
+
+        // Auto-update as you type (with a tiny debounce to prevent freezing)
+        let timeout;
+        editor.addEventListener('input', () => {
+            clearTimeout(timeout);
+            timeout = setTimeout(updatePreview, 300);
+        });
+
+        // Initial render
+        updatePreview();
+    </script>
+</body>
+</html>
